@@ -1,6 +1,8 @@
 import logging
 import json
 import html
+import socket
+import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Request, Form
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -42,6 +44,73 @@ async def lifespan(app: FastAPI):
         logger.info("Agendador encerrado.")
 
 app = FastAPI(title="PlexCritic AI", lifespan=lifespan)
+
+_dns_cache = {}
+
+def get_allowed_ips():
+    now = time.time()
+    allowed_ips = set()
+    for host in Config.ALLOWED_HOSTS_OR_IPS:
+        clean_host = host.split("/")[0].strip()
+        if not clean_host:
+            continue
+        if clean_host.replace(".", "").isdigit():
+            allowed_ips.add(clean_host)
+            continue
+        cached = _dns_cache.get(clean_host)
+        if cached and (now - cached["time"] < 60):
+            allowed_ips.add(cached["ip"])
+        else:
+            try:
+                ip = socket.gethostbyname(clean_host)
+                _dns_cache[clean_host] = {"ip": ip, "time": now}
+                allowed_ips.add(ip)
+            except Exception as e:
+                logger.warning(f"Erro ao resolver DNS de {clean_host}: {e}")
+                if cached:
+                    allowed_ips.add(cached["ip"])
+    return allowed_ips
+
+def get_client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else ""
+
+@app.middleware("http")
+async def ip_whitelist_middleware(request: Request, call_next):
+    if not Config.ALLOWED_HOSTS_OR_IPS:
+        return await call_next(request)
+    
+    path = request.url.path
+    if path in ("/", "/analyze-ui", "/scan"):
+        client_ip = get_client_ip(request)
+        if client_ip not in ("127.0.0.1", "::1"):
+            allowed_ips = get_allowed_ips()
+            if client_ip not in allowed_ips:
+                logger.warning(f"Acesso bloqueado ao dashboard vindo do IP: {client_ip}. Permitidos: {allowed_ips}")
+                return HTMLResponse(f"""
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Acesso Restrito</title>
+                    <script src="https://cdn.tailwindcss.com"></script>
+                </head>
+                <body class="bg-gray-950 text-gray-100 flex items-center justify-center min-h-screen p-4 font-sans">
+                    <div class="max-w-md w-full bg-gray-900 border border-red-800 rounded-2xl p-8 shadow-2xl text-center">
+                        <div class="text-5xl mb-4">⛔</div>
+                        <h1 class="text-2xl font-bold text-red-500 mb-2">Acesso Restrito</h1>
+                        <p class="text-gray-400 text-sm mb-4">Este dashboard está configurado para aceitar apenas requisições do IP autorizado.</p>
+                        <div class="bg-gray-800 p-3 rounded-lg text-xs font-mono text-gray-300 border border-gray-700">
+                            Seu IP detectado: <span class="text-amber-400 font-bold">{html.escape(client_ip)}</span>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                """, status_code=403)
+                
+    return await call_next(request)
 
 @app.get("/", response_class=HTMLResponse)
 def index(scanning: int = 0):

@@ -26,6 +26,9 @@ class Config:
     UPDATE_PLEX_SUMMARY = os.getenv("UPDATE_PLEX_SUMMARY", "true").lower() in ("true", "1", "yes")
     SUMMARY_POSITION = os.getenv("SUMMARY_POSITION", "top").lower()
 
+    # Controle de Acesso (IP ou Domínio DuckDNS para o Dashboard)
+    ALLOWED_HOSTS_OR_IPS = [h.strip() for h in os.getenv("ALLOWED_HOSTS_OR_IPS", "").split(",") if h.strip()]
+    
     # Outras configurações
     CHECK_INTERVAL_MINUTES = int(os.getenv("CHECK_INTERVAL_MINUTES", "10"))
     DELAY_BETWEEN_ITEMS = float(os.getenv("DELAY_BETWEEN_ITEMS", "5.0"))

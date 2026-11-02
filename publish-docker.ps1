@@ -35,3 +35,4 @@ if ($LASTEXITCODE -eq 0) {
 } else {
     Write-Host "`nFalha no push. Se nao estiver autenticado, execute primeiro: docker login" -ForegroundColor Red
 }
+

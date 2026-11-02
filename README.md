@@ -138,7 +138,7 @@ Acesse o painel web em seu navegador:
 | `UPDATE_PLEX_SUMMARY` | `true` | Anexa a análise resumida no texto da sinopse. |
 | `CHECK_INTERVAL_MINUTES`| `10` | Intervalo da varredura periódica (em minutos). |
 | `DELAY_BETWEEN_ITEMS` | `5` | Pausa de segurança entre requisições (em segundos). |
-| `ALLOWED_HOSTS_OR_IPS` | - | IP ou domínio DuckDNS com permissão de acesso ao dashboard (ex: `sgoncalves.duckdns.org`). Deixe vazio para liberar a todos. |
+| `ALLOWED_HOSTS_OR_IPS` | - | IP ou domínio DuckDNS com permissão de acesso ao dashboard (ex: `nick.duckdns.org`). Deixe vazio para liberar a todos. |
 | `PORT` | `8080` | Porta onde a aplicação responderá. |
 
 ---

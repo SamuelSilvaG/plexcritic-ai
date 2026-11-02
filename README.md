@@ -5,6 +5,7 @@
 **Análises inteligentes, notas consolidadas e recomendações sinceras sem spoilers diretamente no seu Plex Media Server.**
 
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-samuelsilvag%2Fplexcritic--ai-blue?style=for-the-badge&logo=docker)](https://hub.docker.com/r/samuelsilvag/plexcritic-ai)
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Groq / OpenAI](https://img.shields.io/badge/Groq%20%2F%20OpenAI-FF6F00?style=for-the-badge&logo=openai&logoColor=white)](https://console.groq.com/)
@@ -60,9 +61,9 @@ Ao abrir o filme ou série na sua TV, celular ou computador:
 - ⚡ **Detecção Automática em Tempo Real**: Suporte nativo a Webhooks do Plex (`library.new`) e varredura periódica em segundo plano.
 - 🍿 **Filmes, Séries & Animes**: Detecta novos episódios e vincula a recomendação diretamente na página principal da série/anime.
 - 🔒 **Sem Spoilers**: Prompts calibrados estritamente para manter surpresas intactas e nunca recomendar trailers.
-- 🛡️ **Segurança Blindada**: Proteção nativa contra injeções de script (XSS) e higienização rigorosa de entradas de formulário.
+- 🛡️ **Segurança Blindada**: Proteção contra injeções de script (XSS) e opção de restringir o dashboard ao seu IP ou domínio dinâmico DuckDNS.
 - 🚀 **100% Gratuito com Groq (itsfree.ai)**: Respostas em menos de 1 segundo utilizando modelos de ponta sem custos de API.
-- 🌐 **Dashboard Web Embutido**: Painel moderno em Tailwind CSS na porta `8080` com busca manual e histórico das últimas avaliações.
+- 🌐 **Dashboard Web Embutido**: Painel moderno em Tailwind CSS com status da conexão Plex, botão de varredura manual e histórico das últimas avaliações.
 
 ---
 
@@ -70,14 +71,14 @@ Ao abrir o filme ou série na sua TV, celular ou computador:
 
 ### Pré-requisitos
 - [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/) instalados.
-- Um servidor **Plex Media Server** em execução na sua rede local.
+- Um servidor **Plex Media Server** em execução na sua rede local ou nuvem.
 - Uma chave de API gratuita da **Groq** ([console.groq.com](https://console.groq.com/keys)) ou OpenAI.
 
 ---
 
 ### 1. Clonar o Repositório
 ```bash
-git clone https://github.com/SEU_USUARIO/plexcritic-ai.git
+git clone https://github.com/SamuelSilvaG/plexcritic-ai.git
 cd plexcritic-ai
 ```
 
@@ -137,6 +138,7 @@ Acesse o painel web em seu navegador:
 | `UPDATE_PLEX_SUMMARY` | `true` | Anexa a análise resumida no texto da sinopse. |
 | `CHECK_INTERVAL_MINUTES`| `10` | Intervalo da varredura periódica (em minutos). |
 | `DELAY_BETWEEN_ITEMS` | `5` | Pausa de segurança entre requisições (em segundos). |
+| `ALLOWED_HOSTS_OR_IPS` | - | IP ou domínio DuckDNS com permissão de acesso ao dashboard (ex: `sgoncalves.duckdns.org`). Deixe vazio para liberar a todos. |
 | `PORT` | `8080` | Porta onde a aplicação responderá. |
 
 ---

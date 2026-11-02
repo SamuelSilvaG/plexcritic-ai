@@ -183,18 +183,6 @@ def index(scanning: int = 0):
 
             {scan_banner}
 
-            <!-- Card de Busca Manual -->
-            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg">
-                <h2 class="text-lg font-semibold text-gray-200 mb-2">🔍 Analisar Filme, Série ou Anime</h2>
-                <form action="/analyze-ui" method="post" class="flex gap-3">
-                    <input type="text" name="title" required maxlength="200" placeholder="Digite o nome do filme, série ou anime na biblioteca..." 
-                           class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500">
-                    <button type="submit" class="bg-amber-500 hover:bg-amber-600 font-bold text-gray-950 px-5 py-2.5 rounded-lg text-sm transition">
-                        Pesquisar & Analisar
-                    </button>
-                </form>
-            </div>
-
             <!-- Tabela de Últimos Analisados -->
             <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg">
                 <div class="flex justify-between items-center mb-4">

@@ -1,0 +1,12 @@
+services:
+  plex-critic:
+    build: .
+    container_name: plex-critic
+    restart: unless-stopped
+    ports:
+      - "8180:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+

@@ -1,0 +1,9 @@
+plexapi>=4.15.17
+openai>=1.50.0
+fastapi>=0.115.0
+uvicorn>=0.32.0
+python-multipart>=0.0.9
+requests>=2.32.3
+beautifulsoup4>=4.12.3
+python-dotenv>=1.0.1
+apscheduler>=3.10.4

@@ -1,5 +1,6 @@
 services:
   plex-critic:
+    image: samuelsilvag/plexcritic-ai:latest
     build: .
     container_name: plex-critic
     restart: unless-stopped
